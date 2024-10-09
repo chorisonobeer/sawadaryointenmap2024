@@ -14,6 +14,7 @@ declare namespace Pwamap {
     '画像4': string;  
     '画像5': string;
     '駐車場': string;  
+    '創業年月': string;  
     'TEL': string;    
     'URL': string;
     'Instagram': string;
