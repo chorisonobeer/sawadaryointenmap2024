@@ -74,6 +74,7 @@ const Content = (props: Props) => {
                 </Link>
               </span>
               <span className="nowrap">{distanceTipText && <span className="distance">現在位置から {distanceTipText}</span> }</span><br></br>
+              <br>&nbsp;</br>
               <span className="nowrap">{distanceTipText && <span className="distance">創業年月  {shop['創業年月']}</span> }</span><br></br>
 
             </div>
@@ -110,7 +111,7 @@ const Content = (props: Props) => {
               data-navigation-control="off"
             ></div>
 
-            <p><a className="small" href={`http://maps.apple.com/?q=${shop['緯度']},${shop['経度']}`}>スポットまでの道順</a></p>
+            <h3><a className="small" href={`http://maps.apple.com/?q=${shop['緯度']},${shop['経度']}`}>この店までの道順を調べる</a></h3>
 
           </>
           :
