@@ -74,7 +74,7 @@ const Content = (props: Props) => {
                 </Link>
               </span>
               <span className="nowrap">{distanceTipText && <span className="distance">現在位置から {distanceTipText}</span> }</span>
-              <span className="nowrap" style="display: inline-block;>{distanceTipText && <span className="history">創業年月  {shop['創業年月']}</span> }</span>
+              <span className="nowrap" style="display: inline-block">{distanceTipText && <span className="history">創業年月  {shop['創業年月']}</span> }</span>
 
             </div>
             
