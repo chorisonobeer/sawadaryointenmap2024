@@ -73,10 +73,11 @@ const Content = (props: Props) => {
                   <span onClick={clickHandler} className="category">{category}</span>
                 </Link>
               </span>
-              <span className="nowrap">{distanceTipText && <span className="distance">現在位置から {distanceTipText}</span> }</span><br></br>
-              <span className="nowrap">{distanceTipText && <span className="history">創業年月  {shop['創業年月']}</span> }</span><br></br>
+              <span className="nowrap">{distanceTipText && <span className="distance">現在位置から {distanceTipText}</span> }</span>
+              <span>{distanceTipText && <span className="history">創業年月  {shop['創業年月']}</span> }</span>
 
             </div>
+            
             <h3> 駐車場 : {shop['駐車場']}</h3>            
             <div style={{margin: "24px 0"}}><Links data={shop} /></div>
           
