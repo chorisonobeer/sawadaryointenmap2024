@@ -11,8 +11,8 @@ on:
   workflow_dispatch:
 
   schedule:
-    - cron:  '*/10 * * * *'
-    # 10分ごとに実行
+    - cron:  '*/60 * * * *'
+    # 60分ごとに実行
 
 permissions:
   contents: write
