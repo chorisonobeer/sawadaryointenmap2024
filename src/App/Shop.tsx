@@ -78,7 +78,7 @@ const Content = (props: Props) => {
 
             <div style={{margin: "24px 0"}}><Links data={shop} /></div>
 
-            <h3>"駐車場 : "{shop['駐車場']}</h3>
+            <h3> 駐車場 : {shop['駐車場']}</h3>
             
             <div>
             { shop['画像'] && <img src={shop['画像']} alt={shop['スポット名']} style={{width: "100%"}} />}
