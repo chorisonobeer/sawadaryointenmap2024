@@ -40,6 +40,7 @@ const Content = (props: Props) => {
           <div className="category-item">
             <label htmlFor="category-select">カテゴリから選ぶ</label>
             <Select
+              placeholder="Choose a flavor..."
               onChange={(e) => {
                 if (e) {
                   navigate(`/list?category=${e.value}`);
