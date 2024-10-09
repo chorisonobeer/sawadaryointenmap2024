@@ -22,7 +22,7 @@ const Content = () => {
             Google スプレッドシートを更新するだけでオリジナルの地図アプリを作成することができます。</p>
         <p>プログラムはオープンソースで公開しているため、自由にカスタマイズしてご利用いただけます。</p>
 
-        <h2> Geolonia PWAマップについて</h2>
+        <h1> 佐和田料飲店マップについて</h1>
         <p><a href="https://blog.geolonia.com/2022/05/17/pwamap-beta.html" target='_blank' rel="noreferrer">https://blog.geolonia.com/2022/05/17/pwamap-beta.html</a></p>
 
         <p>また、独自ドメインでの利用やデザインのカスタマイズや利用に必要な緯度・経度情報の提供も有償で別途承ります。ご希望の方は下記までお問い合わせください。</p>
