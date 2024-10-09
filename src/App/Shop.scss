@@ -83,18 +83,20 @@
     }
   }
 
-  .category, .distance
+  .category, .distance, .history
   {
     border-radius: 4px;
     color: #ffffff;
-    padding: 4px;
+    /* padding: 4px; */    
     font-size: 0.8rem;
+    padding: 5px 3px 5px 3px;
+    margin-bottom: 8px;
   }
 
   .category
   {
     background-color: #f5b041;
-    &:hover
+      &:hover
     {
       opacity: 0.8;
     }
@@ -103,7 +105,16 @@
   .distance
   {
     background-color: #41b0f5;
-    &:hover
+      &:hover
+    {
+      opacity: 0.8;
+    }
+  }
+
+    .history
+  {
+    background-color: #733b0a;
+      &:hover
     {
       opacity: 0.8;
     }
