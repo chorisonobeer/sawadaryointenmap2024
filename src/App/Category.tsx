@@ -39,7 +39,7 @@ const Content = (props: Props) => {
         <div className="container">
           <div className="category-item">
             <label htmlFor="category-select">カテゴリから選ぶ</label>
-            <Select
+            <Select2
               onChange={(e) => {
                 if (e) {
                   navigate(`/list?category=${e.value}`);
