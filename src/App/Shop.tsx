@@ -80,13 +80,13 @@ const Content = (props: Props) => {
 
             { shop['画像'] && <img src={shop['画像']} alt={shop['スポット名']} style={{width: "100%"}} />}
 
-            { shop['画像'] && <img src={shop['画像']} alt={shop['スポット名']} style={{width: "100%"}} />}
+            { shop['画像2'] && <img src={shop['画像2']} alt={shop['スポット名']} style={{width: "100%"}} />}
 
-            { shop['画像'] && <img src={shop['画像']} alt={shop['スポット名']} style={{width: "100%"}} />}
+            { shop['画像3'] && <img src={shop['画像3']} alt={shop['スポット名']} style={{width: "100%"}} />}
 
-            { shop['画像'] && <img src={shop['画像']} alt={shop['スポット名']} style={{width: "100%"}} />}
+            { shop['画像4'] && <img src={shop['画像4']} alt={shop['スポット名']} style={{width: "100%"}} />}
 
-            { shop['画像'] && <img src={shop['画像']} alt={shop['スポット名']} style={{width: "100%"}} />}
+            { shop['画像5'] && <img src={shop['画像5']} alt={shop['スポット名']} style={{width: "100%"}} />}
             
             <p style={{margin: "24px 0", wordBreak: "break-all"}}>{toBreakLine(content)}</p>
 
