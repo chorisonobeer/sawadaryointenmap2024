@@ -1,3 +1,12 @@
+/**
+\src\App\Map.tsx
+2025-02-17 14:30:00
+
+SearchList をインポートし、地図表示画面の左上に検索フォーム＋検索結果を追加。
+既存の地図ロジック・クラスタリング・スポット詳細モーダルなどはそのまま継承。
+**/
+
+
 import React from "react";
 // @ts-ignore
 import geojsonExtent from '@mapbox/geojson-extent'
@@ -32,7 +41,7 @@ const searchBoxStyle: React.CSSProperties = {
   backgroundColor: 'rgba(255, 255, 255, 0.9)',
   padding: '8px',
   borderRadius: '4px',
-  maxWidth: '320px',
+  maxWidth: '400px',
 };
 
 const hidePoiLayers = (map: any) => {
