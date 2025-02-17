@@ -4,19 +4,38 @@ import geojsonExtent from '@mapbox/geojson-extent'
 import toGeoJson from './toGeoJson'
 import setCluster from './setCluster'
 import Shop from './Shop'
+import SearchList from './SearchList'
 
 type Props = {
   data: Pwamap.ShopData[];
 };
 
-const CSS: React.CSSProperties = {
+// 画面全体を包むコンテナのスタイル
+const containerStyle: React.CSSProperties = {
   width: '100%',
   height: '100%',
   position: 'relative',
-}
+};
+
+// 地図部分のスタイル
+const mapStyle: React.CSSProperties = {
+  width: '100%',
+  height: '100%',
+};
+
+// 左上に絶対配置する検索ボックスのスタイル
+const searchBoxStyle: React.CSSProperties = {
+  position: 'absolute',
+  top: '10px',
+  left: '10px',
+  zIndex: 999,
+  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  padding: '8px',
+  borderRadius: '4px',
+  maxWidth: '320px',
+};
 
 const hidePoiLayers = (map: any) => {
-
   const hideLayers = [
     'poi',
     'poi-primary',
@@ -25,54 +44,51 @@ const hidePoiLayers = (map: any) => {
     'poi-r25',
     'poi-bus',
     'poi-entrance',
-  ]
+  ];
 
   for (let i = 0; i < hideLayers.length; i++) {
     const layerId = hideLayers[i];
-    map.setLayoutProperty(layerId, 'visibility', 'none')
+    map.setLayoutProperty(layerId, 'visibility', 'none');
   }
-}
+};
 
 const Content = (props: Props) => {
   const mapNode = React.useRef<HTMLDivElement>(null);
-  const [mapObject, setMapObject] = React.useState<any>()
-  const [shop, setShop] = React.useState<Pwamap.ShopData | undefined>(undefined)
+  const [mapObject, setMapObject] = React.useState<any>();
+  const [shop, setShop] = React.useState<Pwamap.ShopData | undefined>(undefined);
 
-  const addMarkers = (mapObject: any, data: any) => {
-
-    if (!mapObject || data.length === 0) {
-      return
+  // マップ内にスポットを追加
+  const addMarkers = (map: any, data: Pwamap.ShopData[]) => {
+    if (!map || data.length === 0) {
+      return;
     }
 
-    mapObject.on('render', () => {
-
-      // nothing to do if shops exists.
-      if (mapObject.getSource('shops')) {
-        return
+    map.on('render', () => {
+      // すでに "shops" ソースがあれば何もしない
+      if (map.getSource('shops')) {
+        return;
       }
 
-      hidePoiLayers(mapObject)
+      // POI を非表示
+      hidePoiLayers(map);
 
-      const textColor = '#000000'
-      const textHaloColor = '#FFFFFF'
+      const textColor = '#000000';
+      const textHaloColor = '#FFFFFF';
+      const geojson = toGeoJson(data);
 
-      const geojson = toGeoJson(data)
-
-      mapObject.addSource('shops', {
+      map.addSource('shops', {
         type: 'geojson',
         data: geojson,
         cluster: true,
         clusterMaxZoom: 14,
         clusterRadius: 25,
-      })
+      });
 
-      mapObject.addLayer({
+      map.addLayer({
         id: 'shop-points',
         type: 'circle',
         source: 'shops',
-        filter: ['all',
-          ['==', '$type', 'Point'],
-        ],
+        filter: ['all', ['==', '$type', 'Point']],
         paint: {
           'circle-radius': 13,
           'circle-color': '#FF0000',
@@ -81,22 +97,20 @@ const Content = (props: Props) => {
           'circle-stroke-color': '#FFFFFF',
           'circle-stroke-opacity': 1,
         },
-      })
+      });
 
-      mapObject.addLayer({
+      map.addLayer({
         id: 'shop-symbol',
         type: 'symbol',
         source: 'shops',
-        filter: ['all',
-          ['==', '$type', 'Point'],
-        ],
+        filter: ['all', ['==', '$type', 'Point']],
         paint: {
           'text-color': textColor,
           'text-halo-color': textHaloColor,
           'text-halo-width': 2,
         },
         layout: {
-          'text-field': "{スポット名}",
+          'text-field': '{スポット名}',
           'text-font': ['Noto Sans Regular'],
           'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
           'text-radial-offset': 0.5,
@@ -106,69 +120,64 @@ const Content = (props: Props) => {
           'text-max-width': 12,
           'text-allow-overlap': false,
         },
-      })
+      });
 
-      mapObject.on('mouseenter', 'shop-points', () => {
-        mapObject.getCanvas().style.cursor = 'pointer'
-      })
+      map.on('mouseenter', 'shop-points', () => {
+        map.getCanvas().style.cursor = 'pointer';
+      });
+      map.on('mouseleave', 'shop-points', () => {
+        map.getCanvas().style.cursor = '';
+      });
 
-      mapObject.on('mouseleave', 'shop-points', () => {
-        mapObject.getCanvas().style.cursor = ''
-      })
+      map.on('mouseenter', 'shop-symbol', () => {
+        map.getCanvas().style.cursor = 'pointer';
+      });
+      map.on('mouseleave', 'shop-symbol', () => {
+        map.getCanvas().style.cursor = '';
+      });
 
-      mapObject.on('mouseenter', 'shop-symbol', () => {
-        mapObject.getCanvas().style.cursor = 'pointer'
-      })
-
-      mapObject.on('mouseleave', 'shop-symbol', () => {
-        mapObject.getCanvas().style.cursor = ''
-      })
-
-      mapObject.on('click', 'shop-points', (event: any) => {
+      // クラスタ外のスポットクリック時にモーダルを表示
+      map.on('click', 'shop-points', (event: any) => {
         if (!event.features[0].properties.cluster) {
-          setShop(event.features[0].properties)
+          setShop(event.features[0].properties);
         }
-      })
-
-      mapObject.on('click', 'shop-symbol', (event: any) => {
+      });
+      map.on('click', 'shop-symbol', (event: any) => {
         if (!event.features[0].properties.cluster) {
-          setShop(event.features[0].properties)
+          setShop(event.features[0].properties);
         }
-      })
+      });
 
-      setCluster(mapObject)
-
-
+      // クラスターをクリックしたら拡大
+      setCluster(map);
     });
+  };
 
-  }
-
+  // コンポーネント初回レンダー / data変化時にスポットを追加
   React.useEffect(() => {
+    addMarkers(mapObject, props.data);
+  }, [mapObject, props.data]);
 
-    addMarkers(mapObject, props.data)
-
-  }, [mapObject, props.data])
-
+  // data変化時に地図の表示範囲をフィット
   React.useEffect(() => {
     if (!mapObject || props.data.length === 0) {
-      return
+      return;
     }
-    const geojson = toGeoJson(props.data)
-    const bounds = geojsonExtent(geojson)
+    const geojson = toGeoJson(props.data);
+    const bounds = geojsonExtent(geojson);
 
     if (bounds) {
       mapObject.fitBounds(bounds, {
-        padding: 50
-      })
+        padding: 50,
+      });
     }
-  }, [mapObject, props.data])
+  }, [mapObject, props.data]);
 
+  // マップの初期化 (1度のみ)
   React.useEffect(() => {
-    // Only once reder the map.
     if (!mapNode.current || mapObject) {
-      return
+      return;
     }
-
     // @ts-ignore
     const { geolonia } = window;
 
@@ -178,44 +187,44 @@ const Content = (props: Props) => {
     });
 
     const onMapLoad = () => {
-      hidePoiLayers(map)
-      setMapObject(map)
-    }
+      hidePoiLayers(map);
+      setMapObject(map);
+    };
+    const orientationChangeHandler = () => {
+      map.resize();
+    };
 
-    const orienteationchangeHandler = () => {
-      map.resize()
-    }
-
-    // attach
-    map.on('load', onMapLoad)
-
-    window.addEventListener('orientationchange', orienteationchangeHandler)
+    map.on('load', onMapLoad);
+    window.addEventListener('orientationchange', orientationChangeHandler);
 
     return () => {
-      // detach to prevent memory leak
-      window.removeEventListener('orientationchange', orienteationchangeHandler)
-      map.off('load', onMapLoad)
-    }
-  }, [mapNode, mapObject, props.data])
+      window.removeEventListener('orientationchange', orientationChangeHandler);
+      map.off('load', onMapLoad);
+    };
+  }, [mapNode, mapObject]);
 
   const closeHandler = () => {
-    setShop(undefined)
-  }
+    setShop(undefined);
+  };
 
   return (
-    <div style={CSS}>
+    <div style={containerStyle}>
+      {/* 左上に検索フォームを配置 */}
+      <div style={searchBoxStyle}>
+        <SearchList data={props.data} />
+      </div>
+
+      {/* 地図表示エリア */}
       <div
         ref={mapNode}
-        style={CSS}
+        style={mapStyle}
         data-geolocate-control="on"
         data-marker="off"
         data-gesture-handling="off"
       ></div>
-      {shop ?
-        <Shop shop={shop} close={closeHandler} />
-        :
-        <></>
-      }
+
+      {/* 店舗詳細モーダル */}
+      {shop ? <Shop shop={shop} close={closeHandler} /> : <></>}
     </div>
   );
 };

@@ -21,6 +21,10 @@ declare namespace Pwamap {
     'Twitter': string;
     'Facebook': string;
     '公式サイト': string
+    '定休日': string;
+    '営業時間': string
+    '住所': string;
+    
   }
 
   type LngLat = [number, number]
